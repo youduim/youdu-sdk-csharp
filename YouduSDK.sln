@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouduSDK", "YouduSDK\YouduSDK.csproj", "{8184290A-6AEA-4EE7-B181-E0C7311201EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouduSDKTests", "YouduSDKTests\YouduSDKTests.csproj", "{88E69BD8-2856-4ED1-ABF8-01EF9E6CEA85}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDemo", "AppDemo\AppDemo.csproj", "{2240D6A6-E6B3-48BD-A578-CCE8BD7FADEF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8184290A-6AEA-4EE7-B181-E0C7311201EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8184290A-6AEA-4EE7-B181-E0C7311201EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8184290A-6AEA-4EE7-B181-E0C7311201EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8184290A-6AEA-4EE7-B181-E0C7311201EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88E69BD8-2856-4ED1-ABF8-01EF9E6CEA85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88E69BD8-2856-4ED1-ABF8-01EF9E6CEA85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88E69BD8-2856-4ED1-ABF8-01EF9E6CEA85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88E69BD8-2856-4ED1-ABF8-01EF9E6CEA85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2240D6A6-E6B3-48BD-A578-CCE8BD7FADEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2240D6A6-E6B3-48BD-A578-CCE8BD7FADEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2240D6A6-E6B3-48BD-A578-CCE8BD7FADEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2240D6A6-E6B3-48BD-A578-CCE8BD7FADEF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
