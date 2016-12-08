@@ -113,6 +113,11 @@ namespace YouduSDK.EntApp
             return EntAppApi.SCHEME + m_addr + EntAppApi.API_DOWNLOAD_FILE;
         }
 
+        private string apiSearchFile()
+        {
+            return EntAppApi.SCHEME + m_addr + EntAppApi.API_SEARCH_FILE;
+        }
+
         private Token getToken()
         {
             try
@@ -245,6 +250,7 @@ namespace YouduSDK.EntApp
                 Helper.WriteStream(new FileStream(tempFileName, FileMode.Open, FileAccess.Write), AESCrypto.ToBytes(encryptFile));
 
                 var formData = new Dictionary<string, object>();
+                formData["buin"] = String.Format("%d", m_buin);
                 formData["encrypt"] = cipherFileInfo;
 
                 var fileData = new FileData();
@@ -266,6 +272,7 @@ namespace YouduSDK.EntApp
                 var mediaInfo = new JsonReader().Read<Dictionary<string, string>>(AESCrypto.ToString(decryptBuffer));
                 string mediaId;
                 if (!mediaInfo.TryGetValue("mediaId", out mediaId)
+                    || mediaId == null
                     || mediaId.Length == 0)
                 {
                     throw new ParamParserException("invalid mediaId", null);
@@ -354,6 +361,64 @@ namespace YouduSDK.EntApp
             catch (IOException e)
             {
                 throw new HttpRequestException(0, e.Message, e);
+            }
+            catch (WebException e)
+            {
+                throw new HttpRequestException(0, e.Message, e);
+            }
+            catch (Exception e)
+            {
+                if (e is GeneralEntAppException)
+                {
+                    throw e;
+                }
+                else
+                {
+                    throw new UnexpectedException(e.Message, e);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 搜索文件，判断是否存在
+        /// </summary>
+        /// <param name="mediaId">资源Id</param>
+        /// <returns>是否存在</returns>
+        /// <exception cref="AESCryptoException">加解密失败</exception>
+        /// <exception cref="ParamParserException">参数解析失败</exception>
+        /// <exception cref="HttpRequestException">http请求失败</exception>
+        /// <exception cref="UnexpectedException">其它可能的错误</exception>
+        public bool SearchFile(string mediaId)
+        {
+            this.checkAndRefreshToken();
+
+            try
+            {
+                var mediaInfo = new Dictionary<string, string>()
+                {
+                    { "mediaId", mediaId }
+                };
+                var cipherMediaInfo = m_crypto.Encrypt(AESCrypto.ToBytes(new JsonWriter().Write(mediaInfo)));
+                var param = new Dictionary<string, object>()
+                {
+                    { "buin", m_buin },
+                    { "encrypt", cipherMediaInfo }
+                };
+                var client = new HttpClient();
+                var rsp = client.Post(this.apiSearchFile(), param, HttpContentTypes.ApplicationJson, this.tokenQuery());
+
+                Helper.CheckHttpStatus(rsp);
+                var body = rsp.StaticBody<Dictionary<string, object>>(overrideContentType: HttpContentTypes.ApplicationJson);
+                Helper.CheckApiStatus(body);
+
+                var decryptBuffer = m_crypto.Decrypt(Helper.GetEncryptJsonValue(body));
+                var existsInfo = new JsonReader().Read<Dictionary<string, bool>>(AESCrypto.ToString(decryptBuffer));
+                bool exists;
+                if (!existsInfo.TryGetValue("exist", out exists))
+                {
+                    throw new ParamParserException("invalid exist", null);
+                }
+                return exists;
             }
             catch (WebException e)
             {

@@ -53,7 +53,7 @@ namespace YouduSDK.EntApp.Tests
             m_appClient.SendMsg(msg);
         }
 
-        [TestMethod]
+        [TestMethod()]
         public void SendMpnewsMsgTest()
         {
             var mediaId = m_appClient.UploadFile(AppClient.FileTypeImage, ImageName, ImagePath);
@@ -63,7 +63,7 @@ namespace YouduSDK.EntApp.Tests
             m_appClient.SendMsg(msg);
         }
 
-        [TestMethod]
+        [TestMethod()]
         public void SendExlinkMsgTest()
         {
             var mediaId = m_appClient.UploadFile(AppClient.FileTypeImage, ImageName, ImagePath);
@@ -88,6 +88,15 @@ namespace YouduSDK.EntApp.Tests
             var fileInfo = m_appClient.DownloadFile(mediaId, OutDir);
             Console.WriteLine(fileInfo.Item1);
             Console.WriteLine(fileInfo.Item2);
+        }
+
+        [TestMethod()]
+        public void SearchFileTest()
+        {
+            var mediaId = m_appClient.UploadFile(AppClient.FileTypeFile, FileName, FilePath);
+            Console.WriteLine(mediaId);
+            bool exists = m_appClient.SearchFile(mediaId);
+            Console.WriteLine(exists);
         }
     }
 }
