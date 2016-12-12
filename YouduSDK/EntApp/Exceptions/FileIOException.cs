@@ -2,7 +2,7 @@
 
 namespace YouduSDK.EntApp.Exceptions
 {
-    public class FileIOException : System.Exception
+    public class FileIOException : GeneralEntAppException
     {
         public FileIOException(string message, System.Exception innerException)
             : base(message, innerException)

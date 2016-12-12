@@ -2,7 +2,7 @@
 
 namespace YouduSDK.EntApp.Exceptions
 {
-    public class HttpRequestException : System.Exception
+    public class HttpRequestException : GeneralEntAppException
     {
         public HttpRequestException(int statusCode, string message, System.Exception innerException)
             : base(message, innerException)
