@@ -95,8 +95,8 @@ namespace YouduSDK.EntApp.Tests
         {
             var mediaId = m_appClient.UploadFile(AppClient.FileTypeFile, FileName, FilePath);
             Console.WriteLine(mediaId);
-            bool exists = m_appClient.SearchFile(mediaId);
-            Console.WriteLine(exists);
+            var fileInfo = m_appClient.SearchFile(mediaId);
+            Console.WriteLine(fileInfo.ToString());
         }
     }
 }

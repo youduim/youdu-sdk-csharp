@@ -123,7 +123,7 @@ namespace YouduSDK.EntApp
             try
             {
                 var now = (long)new TimeSpan(new DateTime(1970, 1, 1).Ticks).TotalSeconds;
-                var timestamp = AESCrypto.ToBytes(string.Format("%d", now));
+                var timestamp = AESCrypto.ToBytes(string.Format("{0}", now));
                 var encryptTime = m_crypto.Encrypt(timestamp);
                 var param = new Dictionary<string, object>()
                 {
@@ -250,7 +250,8 @@ namespace YouduSDK.EntApp
                 Helper.WriteStream(new FileStream(tempFileName, FileMode.Open, FileAccess.Write), AESCrypto.ToBytes(encryptFile));
 
                 var formData = new Dictionary<string, object>();
-                formData["buin"] = String.Format("%d", m_buin);
+                formData["buin"] = String.Format("{0}", m_buin);
+                formData["appId"] = m_appId;
                 formData["encrypt"] = cipherFileInfo;
 
                 var fileData = new FileData();
@@ -324,6 +325,7 @@ namespace YouduSDK.EntApp
                 var param = new Dictionary<string, object>()
                 {
                     { "buin", m_buin },
+                    { "appId", m_appId },
                     { "encrypt", cipherMediaInfo }
                 };
                 var client = new HttpClient();
@@ -380,15 +382,15 @@ namespace YouduSDK.EntApp
         }
 
         /// <summary>
-        /// 搜索文件，判断是否存在
+        /// 搜索文件信息
         /// </summary>
         /// <param name="mediaId">资源Id</param>
-        /// <returns>是否存在</returns>
+        /// <returns>(文件名, 字节数大小)</returns>
         /// <exception cref="AESCryptoException">加解密失败</exception>
         /// <exception cref="ParamParserException">参数解析失败</exception>
         /// <exception cref="HttpRequestException">http请求失败</exception>
         /// <exception cref="UnexpectedException">其它可能的错误</exception>
-        public bool SearchFile(string mediaId)
+        public Tuple<string, long> SearchFile(string mediaId)
         {
             this.checkAndRefreshToken();
 
@@ -402,6 +404,7 @@ namespace YouduSDK.EntApp
                 var param = new Dictionary<string, object>()
                 {
                     { "buin", m_buin },
+                    { "appId", m_appId },
                     { "encrypt", cipherMediaInfo }
                 };
                 var client = new HttpClient();
@@ -412,13 +415,18 @@ namespace YouduSDK.EntApp
                 Helper.CheckApiStatus(body);
 
                 var decryptBuffer = m_crypto.Decrypt(Helper.GetEncryptJsonValue(body));
-                var existsInfo = new JsonReader().Read<Dictionary<string, bool>>(AESCrypto.ToString(decryptBuffer));
-                bool exists;
-                if (!existsInfo.TryGetValue("exist", out exists))
+                var existsInfo = new JsonReader().Read<Dictionary<string, object>>(AESCrypto.ToString(decryptBuffer));
+                object name;
+                object size;
+                if (!existsInfo.TryGetValue("name", out name)
+                    || name is string == false
+                    || ((string)name).Length == 0
+                    || !existsInfo.TryGetValue("size", out size)
+                    || ((size is int && (int)size > 0) == false && (size is long && (long)size > 0) == false))
                 {
-                    throw new ParamParserException("invalid exist", null);
+                    throw new ParamParserException("invalid file info", null);
                 }
-                return exists;
+                return new Tuple<string, long>((string)name, Convert.ToInt64(size));
             }
             catch (WebException e)
             {
