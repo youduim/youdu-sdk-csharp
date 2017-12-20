@@ -23,7 +23,7 @@ namespace YouduSDK.EntApp.Tests
 
         private const string AppId = ""; // 请填写企业应用AppId
 
-        private const string ToUsers = "hunter"; // 测试收收消息的账号
+        private const string ToUsers = "test"; // 测试收收消息的账号
 
         private AppClient m_appClient = new AppClient(Address, Buin, AppId, EncodingaesKey);
 
@@ -97,6 +97,13 @@ namespace YouduSDK.EntApp.Tests
             Console.WriteLine(mediaId);
             var fileInfo = m_appClient.SearchFile(mediaId);
             Console.WriteLine(fileInfo.ToString());
+        }
+
+        [TestMethod()]
+        public void TimestampTest()
+        {
+            long seconds = Helper.GetSecondTimeStamp();
+            Console.WriteLine(seconds.ToString());
         }
     }
 }

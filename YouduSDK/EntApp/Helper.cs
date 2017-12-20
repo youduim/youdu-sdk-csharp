@@ -67,5 +67,13 @@ namespace YouduSDK.EntApp
                 stream.Write(content, 0, content.Length);
             }
         }
+
+        //获取当前时间秒数
+        public static long GetSecondTimeStamp()
+        {
+            DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1)); // 当地时区
+            long duration = (long)(DateTime.Now - startTime).TotalMilliseconds/1000; // 相差毫秒秒数
+            return duration;
+        }
     }
 }

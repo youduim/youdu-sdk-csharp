@@ -122,7 +122,7 @@ namespace YouduSDK.EntApp
         {
             try
             {
-                var now = (long)new TimeSpan(new DateTime(1970, 1, 1).Ticks).TotalSeconds;
+                var now = Helper.GetSecondTimeStamp();
                 var timestamp = AESCrypto.ToBytes(string.Format("{0}", now));
                 var encryptTime = m_crypto.Encrypt(timestamp);
                 var param = new Dictionary<string, object>()
@@ -175,7 +175,7 @@ namespace YouduSDK.EntApp
                 m_tokenInfo = this.getToken();
             }
             long endTime = m_tokenInfo.activeTime + m_tokenInfo.expire;
-            if (endTime <= (long)new TimeSpan(new DateTime(1970, 1, 1).Ticks).TotalSeconds) {
+            if (endTime <= Helper.GetSecondTimeStamp()) {
                 m_tokenInfo = this.getToken();
             }
         }
