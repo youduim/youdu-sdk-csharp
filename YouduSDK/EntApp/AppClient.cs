@@ -9,6 +9,7 @@ using JsonFx.Json;
 using YouduSDK.EntApp.MessageEntity;
 using System.IO;
 using EasyHttp.Infrastructure;
+using YouduSDK.EntApp.SessionEntity;
 
 namespace YouduSDK.EntApp
 {
@@ -116,6 +117,11 @@ namespace YouduSDK.EntApp
         private string apiSearchFile()
         {
             return EntAppApi.SCHEME + m_addr + EntAppApi.API_SEARCH_FILE;
+        }
+
+        private string apiGetSession()
+        {
+            return EntAppApi.SCHEME + m_addr + EntAppApi.API_GET_SESSION;
         }
 
         private Token getToken()
@@ -427,6 +433,80 @@ namespace YouduSDK.EntApp
                     throw new ParamParserException("invalid file info", null);
                 }
                 return new Tuple<string, long>((string)name, Convert.ToInt64(size));
+            }
+            catch (WebException e)
+            {
+                throw new HttpRequestException(0, e.Message, e);
+            }
+            catch (Exception e)
+            {
+                if (e is GeneralEntAppException)
+                {
+                    throw e;
+                }
+                else
+                {
+                    throw new UnexpectedException(e.Message, e);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 查询会话信息
+        /// </summary>
+        /// <param name="sessionId">会话Id</param>
+        /// <returns>Session</returns>
+        /// <exception cref="AESCryptoException">加解密失败</exception>
+        /// <exception cref="ParamParserException">参数解析失败</exception>
+        /// <exception cref="HttpRequestException">http请求失败</exception>
+        /// <exception cref="UnexpectedException">其它可能的错误</exception>
+        public Session GetSession(string sessionId) 
+        {
+            this.checkAndRefreshToken();
+
+            try
+            {
+                var client = new HttpClient();
+                var rsp = client.Get(this.apiGetSession(), new { accessToken = m_tokenInfo.token, sessionId = sessionId });
+
+                Helper.CheckHttpStatus(rsp);
+                var body = rsp.StaticBody<Dictionary<string, object>>(overrideContentType: HttpContentTypes.ApplicationJson);
+                Helper.CheckApiStatus(body);
+
+                var decryptBuffer = m_crypto.Decrypt(Helper.GetEncryptJsonValue(body));
+                var decryptStr = AESCrypto.ToString(decryptBuffer);
+                var sessInfo = new JsonReader().Read<Dictionary<string, object>>(AESCrypto.ToString(decryptBuffer));
+
+                object title;
+                object owner;
+                object version;
+                object type;
+                object member;
+                object lastMsgId;
+                object activeTime;
+                if (!sessInfo.TryGetValue("title", out title) || title is string == false
+                    || !sessInfo.TryGetValue("owner", out owner) || owner is string == false
+                    || !sessInfo.TryGetValue("version", out version) || (version is int == false && version is long == false)
+                    || !sessInfo.TryGetValue("type", out type) || type is string == false
+                    || !sessInfo.TryGetValue("member", out member) || member is string[] == false
+                    || !sessInfo.TryGetValue("lastMsgId", out lastMsgId) || (lastMsgId is int == false && lastMsgId is long == false)
+                    || !sessInfo.TryGetValue("activeTime", out activeTime) || (activeTime is int == false && activeTime is long == false))
+                {
+                    throw new ParamParserException("invalid session info", null);
+                }
+                var memberList = new List<string>();
+                foreach(var m in (string[])member)
+                {
+                    memberList.Add(m);
+                }
+                return new Session(sessionId, 
+                    (string)title, 
+                    (string)owner, 
+                    Convert.ToInt64(version), 
+                    (string)type, 
+                    memberList, 
+                    Convert.ToInt64(lastMsgId),
+                    Convert.ToInt64(activeTime));
             }
             catch (WebException e)
             {

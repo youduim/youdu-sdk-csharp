@@ -15,5 +15,7 @@ namespace YouduSDK.EntApp
         public const string API_DOWNLOAD_FILE = "/cgi/media/get";
 
         public const string API_SEARCH_FILE = "/cgi/media/search";
+
+        public const string API_GET_SESSION = "/cgi/session/get";
     }
 }

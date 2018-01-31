@@ -71,6 +71,8 @@
     <Compile Include="EntApp\MessageEntity\MpnewsBodyCell.cs" />
     <Compile Include="EntApp\MessageEntity\ReceiveMessage.cs" />
     <Compile Include="EntApp\MessageEntity\TextBody.cs" />
+    <Compile Include="EntApp\SessionEntity\Session.cs" />
+    <Compile Include="EntApp\SessionEntity\SessionMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -5,6 +5,7 @@ using System.IO;
 using YouduSDK.EntApp;
 using YouduSDK.EntApp.AES;
 using YouduSDK.EntApp.MessageEntity;
+using YouduSDK.EntApp.SessionEntity;
 
 namespace AppDemo
 {
@@ -19,14 +20,13 @@ namespace AppDemo
         private const string AppId = ""; // 请填写AppId
         private const string Token = ""; // 请填写回调Token
         private const string Uri = "/msg/receive"; // 请填写回调URI
-        private const string AESKey = ""; // 请填写回调AESKey
 
         private const string Address = "127.0.0.1:7080"; // 请填写有度服务器地址
         private const string EncodingaesKey = ""; // 请填写企业应用EncodingaesKey
         private const string OutDir = @""; // 请填写文件下载目录
 
 
-        private AESCrypto m_crypto = new AESCrypto(AppId, AESKey);
+        private AESCrypto m_crypto = new AESCrypto(AppId, EncodingaesKey);
         private AppClient m_appClient = new AppClient(Address, Buin, AppId, EncodingaesKey);
 
         public override void handleGETRequest(HttpProcessor p)
@@ -118,8 +118,9 @@ namespace AppDemo
                 p.writeFailure();
                 return;
             }
-
+            
             var decryptContent = m_crypto.Decrypt(encryptValue);
+            //var msg = new SessionMessage().FromJson(AESCrypto.ToString(decryptContent));
             var msg = new ReceiveMessage().FromJson(AESCrypto.ToString(decryptContent));
 
             switch (msg.MsgType)
@@ -143,10 +144,10 @@ namespace AppDemo
             }
 
             Console.WriteLine(msg.ToString());
-            Console.WriteLine("packageId: {0}", msg.PackgeId);
+            Console.WriteLine("packageId: {0}", msg.PackageId);
 
             p.writeSuccess();
-            p.outputStream.WriteLine(msg.PackgeId);
+            p.outputStream.WriteLine(msg.PackageId);
         }
     }
 }

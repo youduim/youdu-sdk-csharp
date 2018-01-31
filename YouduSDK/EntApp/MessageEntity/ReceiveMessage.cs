@@ -21,7 +21,7 @@ namespace YouduSDK.EntApp.MessageEntity
 
         private string m_fromUser = "";
         private long m_createTime;
-        private string m_packgeId = "";
+        private string m_packageId = "";
         private string m_msgType = "";
         private MessageBody m_msgBody;
 
@@ -50,11 +50,11 @@ namespace YouduSDK.EntApp.MessageEntity
         /// <summary>
         /// packageId，需要返回给有度服务表示接收成功
         /// </summary>
-        public string PackgeId
+        public string PackageId
         {
             get
             {
-                return m_packgeId;
+                return m_packageId;
             }
         }
 
@@ -113,7 +113,7 @@ namespace YouduSDK.EntApp.MessageEntity
                 }
                 m_fromUser = Convert.ToString(fromUser);
                 m_createTime = Convert.ToInt64(createTime);
-                m_packgeId = Convert.ToString(packageId);
+                m_packageId = Convert.ToString(packageId);
                 m_msgType = type;
                 return this;
             }
@@ -125,7 +125,7 @@ namespace YouduSDK.EntApp.MessageEntity
             return "ReMessage{" +
                     "FromUser='" + m_fromUser + '\'' +
                     ", CreateTime=" + m_createTime +
-                    ", PackgeId=" + m_packgeId +
+                    ", PackageId=" + m_packageId +
                     ", MsgType='" + m_msgType + '\'' +
                     ", MsgBody=" + m_msgBody.ToString() +
                     '}';

@@ -75,5 +75,10 @@ namespace YouduSDK.EntApp
             long duration = (long)(DateTime.Now - startTime).TotalMilliseconds/1000; // 相差毫秒秒数
             return duration;
         }
+
+        public static bool HasKey(object obj, string key)
+        {
+            return ((IDictionary<string, object>)obj).ContainsKey(key);
+        }
     }
 }

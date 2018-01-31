@@ -105,5 +105,12 @@ namespace YouduSDK.EntApp.Tests
             long seconds = Helper.GetSecondTimeStamp();
             Console.WriteLine(seconds.ToString());
         }
+
+        [TestMethod()]
+        public void GetSessionTest()
+        {
+            var session = m_appClient.GetSession("{726C0689-AB55-422A-B4F7-8BA8A580AF9E}");
+            Console.WriteLine(session.ToString());
+        }
     }
 }
