@@ -124,6 +124,16 @@ namespace YouduSDK.EntApp
             return EntAppApi.SCHEME + m_addr + EntAppApi.API_GET_SESSION;
         }
 
+        private string apiSetNotice()
+        {
+            return EntAppApi.SCHEME + m_addr + EntAppApi.API_SET_NOTICE;
+        }
+
+        private string apiPopWindow()
+        {
+            return EntAppApi.SCHEME + m_addr + EntAppApi.API_POPWINDOW;
+        }
+
         private Token getToken()
         {
             try
@@ -507,6 +517,75 @@ namespace YouduSDK.EntApp
                     memberList, 
                     Convert.ToInt64(lastMsgId),
                     Convert.ToInt64(activeTime));
+            }
+            catch (WebException e)
+            {
+                throw new HttpRequestException(0, e.Message, e);
+            }
+            catch (Exception e)
+            {
+                if (e is GeneralEntAppException)
+                {
+                    throw e;
+                }
+                else
+                {
+                    throw new UnexpectedException(e.Message, e);
+                }
+            }
+        }
+
+        public void SetAppNotice(string account, int count, string tip)
+        {
+            try
+            {
+                AppNotice appNotice = new AppNotice(account, count, tip);
+                Console.WriteLine(appNotice.ToJsonString());
+                var cipherText = m_crypto.Encrypt(AESCrypto.ToBytes(appNotice.ToJsonString()));
+                var param = new Dictionary<string, object>()
+                {
+                    { "app_id", m_appId },
+                    { "msg_encrypt", cipherText }
+                };
+                var client = new HttpClient();
+                var rsp = client.Post(this.apiSetNotice(), param, HttpContentTypes.ApplicationJson);
+                Helper.CheckHttpStatus(rsp);
+                var body = rsp.StaticBody<Dictionary<string, object>>(overrideContentType: HttpContentTypes.ApplicationJson);
+                Helper.CheckApiStatus(body);
+            }
+            catch (WebException e)
+            {
+                throw new HttpRequestException(0, e.Message, e);
+            }
+            catch (Exception e)
+            {
+                if (e is GeneralEntAppException)
+                {
+                    throw e;
+                }
+                else
+                {
+                    throw new UnexpectedException(e.Message, e);
+                }
+            }
+        }
+
+        public void PopWindow(PopWindow wd)
+        {
+            try
+            {
+                Console.WriteLine(wd.ToYDSdkJsonString());
+                var cipherText = m_crypto.Encrypt(AESCrypto.ToBytes(wd.ToYDSdkJsonString()));
+                var param = new Dictionary<string, object>()
+                {
+                    { "app_id", m_appId },
+                    { "msg_encrypt", cipherText }
+                };
+                var client = new HttpClient();
+                var rsp = client.Post(this.apiPopWindow(), param, HttpContentTypes.ApplicationJson);
+                Helper.CheckHttpStatus(rsp);
+                var body = rsp.StaticBody<Dictionary<string, object>>(overrideContentType: HttpContentTypes.ApplicationJson);
+                Helper.CheckApiStatus(body);
             }
             catch (WebException e)
             {

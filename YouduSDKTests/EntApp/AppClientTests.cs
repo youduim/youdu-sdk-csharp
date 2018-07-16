@@ -112,5 +112,27 @@ namespace YouduSDK.EntApp.Tests
             var session = m_appClient.GetSession("{726C0689-AB55-422A-B4F7-8BA8A580AF9E}");
             Console.WriteLine(session.ToString());
         }
+
+        [TestMethod()]
+        public void SetAppNoticeTest() {
+            m_appClient.SetAppNotice("max.chen",10,"");
+        }
+
+         [TestMethod()]
+        public void PopWindowTest()
+        {
+            PopWindow win = new PopWindow();
+            win.Url = "http://youdu.im";
+            win.ToUser="max.chen";
+            win.ToDept="1|2|3";
+            win.Title="弹窗测试";
+            win.Height = 500;
+            win.Width = 500;
+            win.Duration = 5;
+            win.PopMode = Const.PopWindow_Mode_Window;
+            //win.PopMode = Const.PopWindow_Mode_Browser;
+            win.Position = Const.PopWindow_Position_BottomRight;
+            m_appClient.PopWindow(win);
+        }
     }
 }
