@@ -10,9 +10,9 @@ namespace YouduSDK.EntApp.AES
     public class Signature
     {
         /// <summary>
-        /// 生成回掉校验签名
+        /// 生成回调校验签名
         /// </summary>
-        /// <param name="token">回掉Token</param>
+        /// <param name="token">回调Token</param>
         /// <param name="timestamp">时间戳，从回调URL参数里取</param>
         /// <param name="nonce">回调随机字符串，从回调URL参数取</param>
         /// <param name="encrypt">加密内容，从回调的json数据中取</param>
