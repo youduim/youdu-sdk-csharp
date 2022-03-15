@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>YouduSDK</RootNamespace>
     <AssemblyName>YouduSDK</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EasyHttp, Version=1.7.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -69,12 +71,14 @@
     <Compile Include="EntApp\MessageEntity\ExlinkBodyCell.cs" />
     <Compile Include="EntApp\MessageEntity\FileBody.cs" />
     <Compile Include="EntApp\MessageEntity\ImageBody.cs" />
+    <Compile Include="EntApp\MessageEntity\LinkBody.cs" />
     <Compile Include="EntApp\MessageEntity\Message.cs" />
     <Compile Include="EntApp\MessageEntity\MessageBody.cs" />
     <Compile Include="EntApp\MessageEntity\MpnewsBody.cs" />
     <Compile Include="EntApp\MessageEntity\MpnewsBodyCell.cs" />
     <Compile Include="EntApp\MessageEntity\PopWindow.cs" />
     <Compile Include="EntApp\MessageEntity\ReceiveMessage.cs" />
+    <Compile Include="EntApp\MessageEntity\SysmsgBody.cs" />
     <Compile Include="EntApp\MessageEntity\TextBody.cs" />
     <Compile Include="EntApp\SessionEntity\Session.cs" />
     <Compile Include="EntApp\SessionEntity\SessionMessage.cs" />

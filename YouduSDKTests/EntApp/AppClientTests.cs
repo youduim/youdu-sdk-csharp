@@ -17,13 +17,13 @@ namespace YouduSDK.EntApp.Tests
 
         private const string Address = "127.0.0.1:7080"; // 请填写有度服务器地址
 
-        private const int Buin = 0; // 请填写企业总机号码
+        private const int Buin = 16100865; // 请填写企业总机号码
 
-        private const string EncodingaesKey = ""; // 请填写企业应用的EncodingaesKey
+        private const string EncodingaesKey = "nCgq3Depv/gWbP6Ki81XwMbdLZBvtOAIbOL/ygEW++Q="; // 请填写企业应用的EncodingaesKey
 
-        private const string AppId = ""; // 请填写企业应用AppId
+        private const string AppId = "yd09FB937746554796B8327F9FA942B80A"; // 请填写企业应用AppId
 
-        private const string ToUsers = "test"; // 测试收收消息的账号
+        private const string ToUsers = "cs1|cs2"; // 测试收收消息的账号
 
         private AppClient m_appClient = new AppClient(Address, Buin, AppId, EncodingaesKey);
 
@@ -32,6 +32,17 @@ namespace YouduSDK.EntApp.Tests
         {
             var body = new TextBody("你好有度");
             var msg = new Message(ToUsers, Message.MessageTypeText, body);
+            m_appClient.SendMsg(msg);
+        }
+
+        [TestMethod()]
+        public void SendSysMsgTest()
+        {
+            var sysMsg = new SysmsgBody();
+            sysMsg.Title = "有度即时通";
+            sysMsg.addTextBody("有度即时通：");
+            sysMsg.addLinkBody("https://youdu.im", "有度即时通", 0);
+            var msg = new Message(ToUsers, Message.MessageTypeSysmsg, sysMsg);
             m_appClient.SendMsg(msg);
         }
 

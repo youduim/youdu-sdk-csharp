@@ -13,6 +13,7 @@ namespace YouduSDK.EntApp.MessageEntity
         public const string MessageTypeMpnews = "mpnews";
         public const string MessageTypeFile = "file";
         public const string MessageTypeExlink = "exlink";
+        public const string MessageTypeSysmsg = "sysMsg";
 
         /// <summary>
         /// 构造函数
